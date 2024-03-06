@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            {% for employee in department.employees %}
+                <div class="col-sm-4 col-md-3">
+                    <div class="card">
+                        <div class="card-body text-center">
+
+                                {{ employee.fname }} {{ employee.lname }}
+
+                            <div class="card-title mb-3">{{ employee.phonenumber }}</div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+
+    </div>
+{% endblock %}
