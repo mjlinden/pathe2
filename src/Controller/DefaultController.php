@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class DefaultController extends AbstractController
 {
-    #[Route('/default', name: 'app_default')]
+    #[Route('/start', name: 'app_default')]
     public function index(EntityManagerInterface $entityManager): Response
     {
         $departments=$entityManager->getRepository(Department::class)->findAll();
@@ -48,6 +48,7 @@ class DefaultController extends AbstractController
             //dd($department);
             $entityManager->persist($department);
             $entityManager->flush();
+            $this->addFlash('success','De afdeling is toegevoegd');
             return $this->redirectToRoute('app_default');
         }
 
