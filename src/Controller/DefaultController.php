@@ -3,7 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Department;
+use App\Entity\Employee;
+use App\Entity\Order;
 use App\Form\DepartmentType;
+use App\Form\OrderType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,7 +26,7 @@ class DefaultController extends AbstractController
         ]);
     }
 
-    #[Route('/department/{id<\d+>}', name: 'app_department')]
+    #[Route('/department/{id}', name: 'app_department')]
     public function index2(EntityManagerInterface $entityManager,$id): Response
     {
         $department=$entityManager->getRepository(Department::class)->find($id);
@@ -31,6 +34,29 @@ class DefaultController extends AbstractController
         return $this->render('default/employees.html.twig', [
             'department' => $department,
 
+        ]);
+    }
+
+    #[Route('/order/{id}', name: 'app_order')]
+    public function order(EntityManagerInterface $entityManager, $id,Request $request)
+    {
+        $order=new Order();
+        $form=$this->createForm(OrderType::class, $order);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid())
+        {
+            //afhandelen data
+            $order = $form->getData();
+            $employee=$entityManager->getRepository(Employee::class)->find($id);
+            $order->setEmployee($employee);
+            //dd($department);
+            $entityManager->persist($order);
+            $entityManager->flush();
+            $this->addFlash('success','De order is toegevoegd');
+            return $this->redirectToRoute('app_default');
+        }
+        return $this->render('default/new.html.twig', [
+            'form' => $form,
         ]);
     }
 
