@@ -28,7 +28,7 @@ class OrderType extends AbstractType
                 'widget' => 'single_text',
             ])
 
-            ->add('submit',SubmitType::class)
+            ->add('delete',SubmitType::class)
         ;
     }
 

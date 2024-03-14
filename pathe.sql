@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Gegenereerd op: 05 mrt 2024 om 14:21
+-- Gegenereerd op: 14 mrt 2024 om 10:00
 -- Serverversie: 10.4.28-MariaDB
 -- PHP-versie: 8.2.4
 
@@ -29,7 +29,6 @@ USE `pathe`;
 -- Tabelstructuur voor tabel `department`
 --
 
-DROP TABLE IF EXISTS `department`;
 CREATE TABLE `department` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
@@ -44,7 +43,8 @@ CREATE TABLE `department` (
 INSERT INTO `department` (`id`, `name`, `location`, `salary`) VALUES
 (3, 'Sales', 'Delft', 12.50),
 (4, 'Cleaning', 'Delft', 14.50),
-(5, 'Movies', 'Delft', 13.50);
+(5, 'Movies', 'Delft', 13.50),
+(6, 'Fietsen', 'Delft', 18.90);
 
 -- --------------------------------------------------------
 
@@ -52,7 +52,6 @@ INSERT INTO `department` (`id`, `name`, `location`, `salary`) VALUES
 -- Tabelstructuur voor tabel `doctrine_migration_versions`
 --
 
-DROP TABLE IF EXISTS `doctrine_migration_versions`;
 CREATE TABLE `doctrine_migration_versions` (
   `version` varchar(191) NOT NULL,
   `executed_at` datetime DEFAULT NULL,
@@ -64,9 +63,8 @@ CREATE TABLE `doctrine_migration_versions` (
 --
 
 INSERT INTO `doctrine_migration_versions` (`version`, `executed_at`, `execution_time`) VALUES
-('DoctrineMigrations\\Version20240228103412', '2024-02-28 11:35:32', 18),
-('DoctrineMigrations\\Version20240228104233', '2024-02-28 11:42:40', 13),
-('DoctrineMigrations\\Version20240305111707', '2024-03-05 12:18:09', 26);
+('DoctrineMigrations\\Version20240313102726', '2024-03-13 11:27:34', 27),
+('DoctrineMigrations\\Version20240313103210', '2024-03-13 11:32:18', 34);
 
 -- --------------------------------------------------------
 
@@ -74,7 +72,6 @@ INSERT INTO `doctrine_migration_versions` (`version`, `executed_at`, `execution_
 -- Tabelstructuur voor tabel `employee`
 --
 
-DROP TABLE IF EXISTS `employee`;
 CREATE TABLE `employee` (
   `id` int(11) NOT NULL,
   `fname` varchar(255) NOT NULL,
@@ -99,7 +96,6 @@ INSERT INTO `employee` (`id`, `fname`, `lname`, `phonenumber`, `department_id`) 
 -- Tabelstructuur voor tabel `messenger_messages`
 --
 
-DROP TABLE IF EXISTS `messenger_messages`;
 CREATE TABLE `messenger_messages` (
   `id` bigint(20) NOT NULL,
   `body` longtext NOT NULL,
@@ -109,6 +105,29 @@ CREATE TABLE `messenger_messages` (
   `available_at` datetime NOT NULL COMMENT '(DC2Type:datetime_immutable)',
   `delivered_at` datetime DEFAULT NULL COMMENT '(DC2Type:datetime_immutable)'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `order`
+--
+
+CREATE TABLE `order` (
+  `id` int(11) NOT NULL,
+  `meal` varchar(255) NOT NULL,
+  `count` int(11) NOT NULL,
+  `deliver_date` date NOT NULL,
+  `employee_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Gegevens worden geëxporteerd voor tabel `order`
+--
+
+INSERT INTO `order` (`id`, `meal`, `count`, `deliver_date`, `employee_id`) VALUES
+(1, 'Ontbijtkoek', 1, '2024-03-14', 2),
+(2, 'kroket', 2, '2024-03-14', 4),
+(3, 'Cola', 2, '2024-03-15', 1);
 
 --
 -- Indexen voor geëxporteerde tabellen
@@ -143,6 +162,13 @@ ALTER TABLE `messenger_messages`
   ADD KEY `IDX_75EA56E016BA31DB` (`delivered_at`);
 
 --
+-- Indexen voor tabel `order`
+--
+ALTER TABLE `order`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `IDX_F52993988C03F15C` (`employee_id`);
+
+--
 -- AUTO_INCREMENT voor geëxporteerde tabellen
 --
 
@@ -150,7 +176,7 @@ ALTER TABLE `messenger_messages`
 -- AUTO_INCREMENT voor een tabel `department`
 --
 ALTER TABLE `department`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT voor een tabel `employee`
@@ -165,6 +191,12 @@ ALTER TABLE `messenger_messages`
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT voor een tabel `order`
+--
+ALTER TABLE `order`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- Beperkingen voor geëxporteerde tabellen
 --
 
@@ -173,6 +205,12 @@ ALTER TABLE `messenger_messages`
 --
 ALTER TABLE `employee`
   ADD CONSTRAINT `FK_5D9F75A1AE80F5DF` FOREIGN KEY (`department_id`) REFERENCES `department` (`id`);
+
+--
+-- Beperkingen voor tabel `order`
+--
+ALTER TABLE `order`
+  ADD CONSTRAINT `FK_F52993988C03F15C` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
